@@ -7,7 +7,6 @@ vim.g.have_nerd_font = true
 -- Load Lazy BEFORE anything else
 require("config.lazy")
 
-vim.cmd('colorscheme  catppuccin-macchiato')
 
 
 -- Load your config AFTER Lazy initialises plugin paths

@@ -6,6 +6,12 @@
 --	end,
 --})
 
+vim.diagnostic.config({
+	virtual_text = {
+		spacing = 2,
+		prefix = "●",
+	},
+})
 
 -- Emergency save when file is readonly
 vim.api.nvim_create_autocmd("BufReadPre", {
