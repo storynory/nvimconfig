@@ -6,6 +6,22 @@
 --	end,
 --})
 
+vim.g.clipboard = {
+	name = "OSC 52",
+	copy = {
+		["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+		["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+	},
+	paste = {
+		["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+		["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+	},
+}
+
+
+
+
+
 vim.diagnostic.config({
 	virtual_text = {
 		spacing = 2,
@@ -75,7 +91,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = function()
 		vim.opt_local.spell = true
 		vim.opt_local.spelllang = "en_gb"
-		--vim.cmd('colorscheme kanagawa-wave')
+		vim.cmd('colorscheme kanagawa-wave')
 
 
 		vim.opt_local.textwidth = 0
