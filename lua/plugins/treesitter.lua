@@ -1,37 +1,66 @@
+local languages = {
+	"html",
+	"svelte",
+	"javascript",
+	"css",
+	"typescript",
+	"tsx",
+	"json",
+	"markdown",
+	"markdown_inline",
+	"lua",
+}
+
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
+		lazy = false,
 		build = ":TSUpdate",
-		event = { "BufReadPost", "BufNewFile" },
+		config = function()
+			local treesitter = require("nvim-treesitter")
 
-		opts = {
-			ensure_installed = {
-				"lua",
-				"html",
-				"css",
-				"javascript",
-				"svelte",
-				"json",
-				"markdown",
-				"markdown_inline",
-			},
+			treesitter.setup({})
 
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = false,
-			},
+			treesitter.install(languages)
 
-			indent = {
-				enable = true,
-			},
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = languages,
+				callback = function(args)
+					pcall(vim.treesitter.start, args.buf)
+				end,
+			})
+		end,
+	},
+
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "main",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
 		},
+		config = function()
+			require("nvim-treesitter-textobjects").setup({
+				select = {
+					lookahead = true,
+				},
+			})
 
-		config = function(_, opts)
-			local ok, configs = pcall(require, "nvim-treesitter.configs")
-			if not ok then
-				return
+			local select = require("nvim-treesitter-textobjects.select")
+
+			local mappings = {
+				af = "@function.outer",
+				["if"] = "@function.inner",
+				ac = "@conditional.outer",
+				ic = "@conditional.inner",
+				at = "@tag.outer",
+				it = "@tag.inner",
+			}
+
+			for key, query in pairs(mappings) do
+				vim.keymap.set({ "x", "o" }, key, function()
+					select.select_textobject(query, "textobjects")
+				end)
 			end
-			configs.setup(opts)
 		end,
 	},
 }
