@@ -2,6 +2,7 @@ local M = {}
 
 require('blink.cmp').get_lsp_capabilities()
 
+
 vim.lsp.config("harper_ls",
 	{
 
